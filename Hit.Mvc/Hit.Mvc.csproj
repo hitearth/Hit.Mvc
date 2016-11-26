@@ -37,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>bin\Debug\Hit.Mvc.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -112,6 +113,8 @@
     <Compile Include="Core\CompileViewVirtualPathFactory.cs" />
     <Compile Include="Tool\ArrayLengthAttribute.cs" />
     <Compile Include="Core\HTMLAttribute.cs" />
+    <Compile Include="Tool\PrecompilingView.cs" />
+    <Compile Include="Tool\Validator.cs" />
     <Compile Include="Tool\Extensions.cs" />
     <Compile Include="Core\Json\JsonNetResult.cs">
       <SubType>Code</SubType>

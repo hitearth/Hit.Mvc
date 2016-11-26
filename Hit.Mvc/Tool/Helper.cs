@@ -3,6 +3,9 @@ using System.Web.WebPages;
 
 namespace Hit.Mvc
 {
+    /// <summary>
+    /// Helper
+    /// </summary>
     public static class Helper
     {
         /// <summary>
@@ -25,7 +28,14 @@ namespace Hit.Mvc
             }
             return html;
         }
-
+        /// <summary>
+        /// 根据instance,获取ViewResult
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="instance"></param>
+        /// <param name="viewPath"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public static ViewResult GetPrecompilingViewResult(this Controller source, WebViewPage instance, string viewPath, object model = null)
         {
             if (model != null)
@@ -42,25 +52,5 @@ namespace Hit.Mvc
             };
         }
 
-    }
-
-    public class PrecompilingView : IView
-    {
-        private WebViewPage webViewPage;
-        private string virtualPath;
-        public PrecompilingView(WebViewPage instance, string viewPath)
-        {
-            webViewPage = instance; virtualPath = viewPath;
-        }
-        public static string[] FileExtensions = new[] { "cshtml", };
-        public void Render(ViewContext viewContext, System.IO.TextWriter writer)
-        {
-            webViewPage.VirtualPath = virtualPath;
-            webViewPage.ViewContext = viewContext;
-            webViewPage.ViewData = viewContext.ViewData;
-
-            WebPageRenderingBase startPage = StartPage.GetStartPage(webViewPage, "_ViewStart", FileExtensions);
-            webViewPage.ExecutePageHierarchy(new WebPageContext(context: viewContext.HttpContext, page: null, model: null), writer, startPage);
-        }
     }
 }

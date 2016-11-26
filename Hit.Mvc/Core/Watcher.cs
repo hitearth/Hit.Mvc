@@ -7,6 +7,9 @@ using System.Web.Caching;
 
 namespace Hit.Mvc
 {
+    /// <summary>
+    /// 监测文件的变更
+    /// </summary>
     public class Watcher
     {
         private JToken data;
@@ -16,7 +19,13 @@ namespace Hit.Mvc
         Action<string> ilog;
         Action<JToken> callback;
         private string watcherKey;
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="key"></param>
+        /// <param name="callback"></param>
+        /// <param name="ilog"></param>
         public Watcher(string path, string key, Action<JToken> callback, Action<string> ilog)
         {
             this.path = path;
@@ -24,6 +33,9 @@ namespace Hit.Mvc
             this.callback = callback;
             watcherKey = "__configkey_" + key;
         }
+        /// <summary>
+        /// 加载文件
+        /// </summary>
         public void Load()
         {
             try

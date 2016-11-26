@@ -1,27 +1,19 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using log4net;
+using System;
 using System.IO;
-using System.Web.Mvc;
-using log4net;
 using System.Web;
+using System.Web.Mvc;
 
 
 namespace Hit.Mvc
 {
+    /// <summary>
+    /// 错误处理
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
     public class HandleErrorAttribute : FilterAttribute, IExceptionFilter
     {
-        private readonly object _typeId = new object();
-
-
-        public override object TypeId
-        {
-            get { return _typeId; }
-        }
-
-
-
-        public virtual void OnException(ExceptionContext filterContext)
+        void IExceptionFilter.OnException(ExceptionContext filterContext)
         {
             if (filterContext == null)
             {

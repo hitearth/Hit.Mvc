@@ -3,15 +3,13 @@ using System.Web.Mvc;
 
 namespace Hit.Mvc
 {
-
+    /// <summary>
+    /// 用户登录权限验证
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, Inherited = true, AllowMultiple = true)]
     public class AuthorizationAttribute : FilterAttribute, IAuthorizationFilter
     {
-        /// <summary>
-        /// 处理用户登录
-        /// </summary>
-        /// <param name="filterContext"></param>
-        public void OnAuthorization(AuthorizationContext filterContext)
+        void IAuthorizationFilter.OnAuthorization(AuthorizationContext filterContext)
         {
             if (filterContext.HttpContext == null) throw new Exception("filterContext");
             filterContext.Controller.ViewBag.__AuthFlag = Config.Cfg.Auth(filterContext);

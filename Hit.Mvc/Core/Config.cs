@@ -14,6 +14,9 @@ using Newtonsoft.Json.Converters;
 
 namespace Hit.Mvc
 {
+    /// <summary>
+    /// Config
+    /// </summary>
     public class Config
     {
         internal static Config Cfg = new Config();
@@ -29,23 +32,54 @@ namespace Hit.Mvc
             return true;
         };
 
-
+        /// <summary>
+        /// 是否是Debug模式
+        /// </summary>
         public bool Debug = true;
+        /// <summary>
+        /// 获取错误页面
+        /// </summary>
         public Func<string, string> GetErrorPage = _ => "/c/error";
+        /// <summary>
+        /// 验证用户
+        /// </summary>
         public Func<AuthorizationContext, bool> Auth = _ => true;
+        /// <summary>
+        /// 获取登陆页面 参数 area
+        /// </summary>
         public Func<string, string> GetLoginPage = _ => "/login";
+        /// <summary>
+        /// 全局异常处理
+        /// </summary>
         public Func<HttpContext, Exception, bool> ExceptionHandle = DefaultExceptionHandle;
         internal Dictionary<string, Func<object>> pathFactory;
         internal Func<string, IEnumerable<Filter>> GetAuthFilterThunk;
+        /// <summary>
+        /// 登陆判断 Filters
+        /// </summary>
         public IEnumerable<Filter> RequireLoginFilters = new List<Filter> { new Filter(new RequireLoginAttribute(), FilterScope.Global, null) };
+        /// <summary>
+        /// 移动端访问判断 Filters
+        /// </summary>
         public IEnumerable<Filter> RequireMobileFilters = new List<Filter> { new Filter(DependencyResolver.Current.GetService<RequireMobileAttribute>(), FilterScope.First, null) };
+        /// <summary>
+        /// 空 Filters
+        /// </summary>
         public IEnumerable<Filter> EmptyFilters = new List<Filter>(0);
 
         internal JToken json;
+        /// <summary>
+        /// 配置项
+        /// </summary>
+        /// <param name="i">key</param>
+        /// <returns>配置项</returns>
         public JToken this[string i] { get { return json[i]; } }
 
         internal Dictionary<string, object> AutofacDict;
 
+        /// <summary>
+        /// 配置开始生效，不执行这个方法的话配置信息无法生效
+        /// </summary>
         public void Start()
         {
 
@@ -123,8 +157,14 @@ namespace Hit.Mvc
         }
 
     }
+    /// <summary>
+    /// 生成Config
+    /// </summary>
     public static class ConfigBuild
     {
+        /// <summary>
+        /// 当前Config
+        /// </summary>
         public static Config Config
         {
             get
@@ -132,6 +172,12 @@ namespace Hit.Mvc
                 return Config.Cfg;
             }
         }
+        /// <summary>
+        /// 只读一次的配置文件的配置
+        /// </summary>
+        /// <param name="cfg"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static Config AddJsonFile(this Config cfg, string path)
         {
             if (Config.Cfg.json == null)
@@ -144,6 +190,15 @@ namespace Hit.Mvc
             else throw new NotSupportedException();
             return cfg;
         }
+        /// <summary>
+        /// 可监测配置文件的配置
+        /// </summary>
+        /// <param name="cfg"></param>
+        /// <param name="path"></param>
+        /// <param name="key"></param>
+        /// <param name="callback"></param>
+        /// <param name="ilog"></param>
+        /// <returns></returns>
         public static Config AddWatch(this Config cfg, string path, string key, Action<JToken> callback, Action<string> ilog)
         {
             new Watcher(path, key, callback, ilog).Load();
@@ -180,20 +235,40 @@ namespace Hit.Mvc
                 };
             return cfg;
         }
-
+        /// <summary>
+        /// 依赖注入配置
+        /// </summary>
+        /// <param name="cfg"></param>
+        /// <param name="AutofacDict"></param>
+        /// <returns></returns>
         public static Config UseAutofac(this Config cfg, Dictionary<string, object> AutofacDict)
         {
             cfg.AutofacDict = AutofacDict;
             return cfg;
 
         }
-
+        /// <summary>
+        /// 权限配置
+        /// </summary>
+        /// <param name="cfg"></param>
+        /// <param name="getLoginPage"></param>
+        /// <param name="auth"></param>
+        /// <param name="requierLogin"></param>
+        /// <returns></returns>
         public static Config UseAuth(this Config cfg, Func<string, string> getLoginPage, Func<AuthorizationContext, bool> auth, bool requierLogin = false)
         {
             Func<string, IEnumerable<Filter>> d;
             if (requierLogin) d = _ => cfg.RequireLoginFilters; else d = _ => cfg.EmptyFilters;
             return cfg.UseAuth(getLoginPage, auth, d);
         }
+        /// <summary>
+        /// 权限配置
+        /// </summary>
+        /// <param name="cfg"></param>
+        /// <param name="getLoginPage"></param>
+        /// <param name="auth"></param>
+        /// <param name="GetAuthFilter"></param>
+        /// <returns></returns>
         public static Config UseAuth(this Config cfg, Func<string, string> getLoginPage, Func<AuthorizationContext, bool> auth, Func<string, IEnumerable<Filter>> GetAuthFilter)
         {
             if (getLoginPage != null) cfg.GetLoginPage = getLoginPage;

@@ -3,18 +3,29 @@ using System;
 
 namespace Hit.Mvc
 {
+    /// <summary>
+    /// 标志 移动端访问判断
+    /// </summary>
     public class RequireMobileAttribute : FilterAttribute, IAuthorizationFilter
     {
         Func<string, string> GetRedirect;
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         public RequireMobileAttribute()
         {
             GetRedirect = _ => "/m";
         }
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="getRedirect">要跳转的移动页面 Func &lt; area, url &gt;</param>
         public RequireMobileAttribute(Func<string, string> getRedirect)
         {
             GetRedirect = getRedirect;
         }
-        public void OnAuthorization(AuthorizationContext filterContext)
+
+        void IAuthorizationFilter.OnAuthorization(AuthorizationContext filterContext)
         {
             if (!filterContext.ActionDescriptor.IsDefined(typeof(HTMLAttribute), true))
             {

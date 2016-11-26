@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Hit.Mvc
 {
+    /// <summary>
+    /// DataRowConverter
+    /// </summary>
     public class DataRowConverter : JsonConverter
     {
         /// <summary>
@@ -28,6 +31,9 @@ namespace Hit.Mvc
             }
             writer.WriteEndObject();
         }
+        /// <summary>
+        /// Gets a value indicating whether this Newtonsoft.Json.JsonConverter can write JSON.
+        /// </summary>
         public override bool CanWrite
         {
             get
@@ -35,6 +41,9 @@ namespace Hit.Mvc
                 return true;
             }
         }
+        /// <summary>
+        /// Gets a value indicating whether this Newtonsoft.Json.JsonConverter can read JSON.
+        /// </summary>
         public override bool CanRead
         {
             get

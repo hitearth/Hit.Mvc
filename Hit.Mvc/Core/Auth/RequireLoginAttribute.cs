@@ -1,10 +1,14 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 
 namespace Hit.Mvc
 {
+    /// <summary>
+    /// 标志 需要登陆
+    /// </summary>
     public class RequireLoginAttribute : FilterAttribute, IAuthorizationFilter
     {
-        public void OnAuthorization(AuthorizationContext filterContext)
+        void IAuthorizationFilter.OnAuthorization(AuthorizationContext filterContext)
         {
             var authFlag = filterContext.Controller.ViewBag.__AuthFlag == null ? false : (bool)filterContext.Controller.ViewBag.__AuthFlag;
             if (authFlag)
