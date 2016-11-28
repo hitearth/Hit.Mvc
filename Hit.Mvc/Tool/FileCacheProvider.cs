@@ -8,7 +8,7 @@ using System.Web.Caching;
 
 namespace Hit.Mvc
 {
-
+#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
     public class FileCacheProvider : OutputCacheProvider
     {
         public override void Initialize(string name, NameValueCollection attributes)
@@ -96,4 +96,5 @@ namespace Hit.Mvc
             ExpiryDate = utcExpiry;
         }
     }
+#pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
 }

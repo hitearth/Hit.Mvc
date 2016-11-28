@@ -6,7 +6,9 @@ using System.Web.Mvc;
 
 namespace Hit.Mvc
 {
+#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
     public class ModelError { public string Key { get; set; } public ModelState Value { get; set; } }
+
     public static class Extensions
     {
         public static List<ModelError> GetError(this ModelStateDictionary model)
@@ -24,4 +26,5 @@ namespace Hit.Mvc
             return model.SelectMany(it => it.Value.Errors.Select(er => er.ErrorMessage)).ToArray();
         }
     }
+#pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
 }

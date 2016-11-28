@@ -1,5 +1,8 @@
 ﻿namespace Hit.Mvc
 {
+    /// <summary>
+    /// JSON数据接口数据格式
+    /// </summary>
     public class JSON_Data
     {
         /// <summary>
@@ -7,7 +10,9 @@
         /// </summary>
         public bool success { get; set; }
 
-
+        /// <summary>
+        /// 代码 0 正常;负数 不可预期异常;正数 预期中的异常
+        /// </summary>
         public int code { get; set; }
 
         /// <summary>
@@ -21,6 +26,9 @@
         public object result { get; set; }
 
     }
+    /// <summary>
+    /// 列表数据格式
+    /// </summary>
     public class JSON_Data_List
     {
         /// <summary>

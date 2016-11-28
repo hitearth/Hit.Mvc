@@ -102,7 +102,9 @@ namespace Hit.Mvc
         {
             throw new NotSupportedException("DateTimeConverter should only be used while deserializing.");
         }
-
+        /// <summary>
+        /// Gets a value indicating whether this Newtonsoft.Json.JsonConverter can read JSON.
+        /// </summary>
         public override bool CanRead
         {
             get

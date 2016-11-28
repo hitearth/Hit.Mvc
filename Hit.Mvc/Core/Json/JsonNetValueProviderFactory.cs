@@ -7,8 +7,16 @@ using Newtonsoft.Json.Linq;
 
 namespace Hit.Mvc
 {
+    /// <summary>
+    /// 表示用来创建payload值提供程序对象的工厂。
+    /// </summary>
     public sealed class JsonNetValueProviderFactory : ValueProviderFactory
     {
+        /// <summary>
+        /// 为指定控制器上下文返回值提供程序对象。
+        /// </summary>
+        /// <param name="controllerContext">一个对象，该对象封装有关当前 HTTP 请求的信息。</param>
+        /// <returns>值提供程序对象。</returns>
         public override IValueProvider GetValueProvider(ControllerContext controllerContext)
         {
             if (controllerContext == null) throw new ArgumentNullException("controllerContext");
@@ -31,22 +39,27 @@ namespace Hit.Mvc
             return new JsonNetValueProvider(JObject.Parse(bodyText) as JContainer);
         }
     }
-
+    /// <summary>
+    /// 定义 ASP.NET MVC 中的payload值提供程序所需的方法。
+    /// </summary>
     public class JsonNetValueProvider : IValueProvider
     {
         private JContainer _jcontainer;
-
+        /// <summary>
+        /// 构造器
+        /// </summary>
+        /// <param name="jcontainer"></param>
         public JsonNetValueProvider(JContainer jcontainer)
         {
             _jcontainer = jcontainer;
         }
 
-        public bool ContainsPrefix(string prefix)
+        bool IValueProvider.ContainsPrefix(string prefix)
         {
             return _jcontainer.SelectToken(prefix) != null;
         }
 
-        public ValueProviderResult GetValue(string key)
+        ValueProviderResult IValueProvider.GetValue(string key)
         {
             var jtoken = _jcontainer.SelectToken(key);
             if (jtoken == null || jtoken.Type == JTokenType.Object) return null;
@@ -59,6 +72,7 @@ namespace Hit.Mvc
             return new ValueProviderResult(jtoken.ToObject<object>(), jtoken.ToString(), CultureInfo.CurrentCulture);
         }
     }
+#pragma warning disable CS1591 // 缺少对公共可见类型或成员的 XML 注释
     public class ArraySp1ProviderResult : ValueProviderResult
     {
         public ArraySp1ProviderResult(object rawValue, string attemptedValue, CultureInfo culture)
@@ -89,4 +103,5 @@ namespace Hit.Mvc
             }
         }
     }
+#pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
 }
