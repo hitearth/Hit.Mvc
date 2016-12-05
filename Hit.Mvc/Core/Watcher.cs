@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Web;
@@ -40,11 +39,33 @@ namespace Hit.Mvc
         {
             try
             {
-                using (StreamReader sr = new StreamReader(path))
+                string jsonstr = null; int i = 0;
+
+                while (true)
                 {
-                    data = JObject.Load(new JsonTextReader(sr)) as JToken;
+                    try
+                    {
+                        jsonstr = File.ReadAllText(path);
+                        break;
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        jsonstr = null; break;
+                    }
+                    catch (IOException ex)
+                    {
+                        if (i > 3) throw ex;
+
+                        i++;
+                        System.Threading.Thread.Sleep(10);
+                    }
                 }
-                callback(data);
+                if (jsonstr != null)
+                {
+                    data = JObject.Parse(jsonstr) as JToken;
+
+                    callback(data);
+                }
             }
             catch (Exception ex)
             {
